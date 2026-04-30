@@ -8,6 +8,7 @@ import time
 import os
 import random
 from pathlib import Path
+import traceback
 
 # Disable pyautogui's failsafe (move mouse to corner to abort)
 # Uncomment if you want this safety feature
@@ -84,8 +85,9 @@ def find_and_click_button(image_path, confidence=0.8, clicks=1, interval=0.5):
         print("Done!")
         return True
         
-    except Exception as e:
-        print(f"Error: {e}")
+    except Exception:
+        # Print full traceback so callers see the cause in logs
+        traceback.print_exc()
         return False
 
 
@@ -98,5 +100,9 @@ if __name__ == "__main__":
     print("Starting in 3 seconds... Make sure the Travian window is active!")
     time.sleep(3)
     
-    # Click the button
-    find_and_click_button(str(button_image), confidence=0.8)
+    # Click the button with a top-level guard to print tracebacks for unexpected errors
+    try:
+        find_and_click_button(str(button_image), confidence=0.8)
+    except Exception:
+        traceback.print_exc()
+        raise

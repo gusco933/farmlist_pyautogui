@@ -38,7 +38,11 @@ fi
 . "$venv_activate"
 
 while :; do
-  python3 "$python_script"
+  # Run Python unbuffered so prints/tracebacks are flushed immediately, and keep stderr visible
+  if ! python3 -u "$python_script" 2>&1; then
+    exit_code=$?
+    echo "Python script exited with code ${exit_code}" >&2
+  fi
 
   offset=$(awk -v variation="$variation" 'BEGIN { srand(); print int(rand() * (variation * 2 + 1)) - variation }')
   sleep_seconds=$((base_interval + offset))
