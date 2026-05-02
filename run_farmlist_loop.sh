@@ -6,7 +6,7 @@ script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 python_script="$script_dir/click_farmlist_button.py"
 venv_activate="$script_dir/.venv/bin/activate"
 
-base_interval="${1:-70}"
+base_interval="${1:-30}"
 variation="${2:-5}"
 
 case "$base_interval" in
